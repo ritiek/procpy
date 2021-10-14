@@ -1,5 +1,4 @@
 import procpy
-import unittest
 
 
 class TestExceptions(procpy.tests.TestInitialize):
@@ -11,7 +10,3 @@ class TestExceptions(procpy.tests.TestInitialize):
 
     def test_swap_process_error(self):
         self.assertTrue(issubclass(procpy.SwapProcessError, procpy.ReadError))
-
-
-if __name__ == "__main__":
-    unittest.main()

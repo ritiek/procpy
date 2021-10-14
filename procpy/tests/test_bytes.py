@@ -1,5 +1,4 @@
 import procpy
-import unittest
 
 
 class TestBytes(procpy.tests.TestInitialize):
@@ -19,7 +18,3 @@ class TestBytes(procpy.tests.TestInitialize):
 
     def test_repr(self):
         self.assertEqual(repr(self.bytes), "Bytes<(numeral=34295)>")
-
-
-if __name__ == "__main__":
-    unittest.main()

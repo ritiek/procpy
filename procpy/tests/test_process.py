@@ -1,5 +1,4 @@
 import procpy
-import unittest
 
 
 class TestProcess(procpy.tests.TestInitialize):
@@ -35,7 +34,3 @@ class TestProcess(procpy.tests.TestInitialize):
     def test_process_repr(self):
         process = procpy.Process(34523)
         self.assertEqual(repr(process), "Process<(pid=34523)>")
-
-
-if __name__ == "__main__":
-    unittest.main()
