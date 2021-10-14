@@ -52,13 +52,30 @@ class TestProcFS(procpy.tests.TestInitialize):
 
     def test_pretty_print(self):
         # TODO: Looks ugly. Is there a better way to assert for output?
-        expected_output = ("    PID     NAME                                      PPID     VIRTMEM     UTIME   STIME    OWNER     \n"
-                           "  45086     fusermount                                3498     2.41MB      0       0        {owner:<10}\n"
-                           "   3585     dolphin                                   818      287.78MB    1470    0        {owner:<10}\n"
-                           "   1337     tmux: client                              1337     8.59MB      0       0        {owner:<10}\n")
-        expected_output = expected_output.format(owner=getpass.getuser())
+        expected_header = "    PID     NAME                                      PPID     VIRTMEM     UTIME   STIME    OWNER     "
+        expected_output = ["  45086     fusermount                                3498     2.41MB      0       0        {owner:<10}",
+                           "   3585     dolphin                                   818      287.78MB    1470    0        {owner:<10}",
+                           "   1337     tmux: client                              1337     8.59MB      0       0        {owner:<10}"]
+
+        for n, line in enumerate(expected_output):
+            expected_output[n] = line.format(owner=getpass.getuser())
+
         procfs = procpy.ProcFS()
         processes = procfs.snapshot()
+
         output = StringIO()
         procpy.pretty_print_processes(processes, out=output)
-        self.assertEqual(output.getvalue(), expected_output)
+        output = output.getvalue().split("\n")
+
+        header = output.pop(0)
+        # Ignore the empty line at the end of the output.
+        output.pop()
+        # I noticed that the output can either be in ascending or descending
+        # order depending on the machine.
+        # (probably depends on OS things and/or Python version?)
+        # Let's sort everything for consistency in any case.
+        expected_output.sort()
+        output.sort()
+
+        self.assertEqual(header, expected_header)
+        self.assertEqual(output, expected_output)
