@@ -4,8 +4,7 @@ import os
 
 class Bytes:
     def __init__(self, numeral):
-        units = ["B", "KB", "MB", "GB"]
-        self.units = units
+        self.units = ["B", "KB", "MB", "GB"]
         self.numeral = int(numeral)
 
     def __int__(self):
@@ -67,4 +66,4 @@ class Process:
 
     @property
     def virtual_memory(self):
-        return Bytes(self._process_info[23 + self._name_offset])
+        return Bytes(self._process_info[22 + self._name_offset])
