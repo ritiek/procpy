@@ -8,7 +8,7 @@ class TestBytes(procpy.tests.TestInitialize):
 
     def test_human_readable(self):
         size, unit = self.bytes.human_readable()
-        self.assertEqual((round(size, 2), unit), (33.49, "KB"))
+        self.assertEqual((size, unit), (33.49, "KB"))
 
     def test_equals(self):
         self.assertEqual(self.bytes, procpy.Bytes(34295))

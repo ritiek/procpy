@@ -16,7 +16,7 @@ class Bytes:
             numeral /= 1024.0
             unit_index += 1
         unit = self.units[unit_index]
-        return numeral, unit
+        return round(numeral, 2), unit
 
     def __repr__(self):
         return "Bytes<(numeral={})>".format(self.numeral)
