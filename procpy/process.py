@@ -8,13 +8,6 @@ class Process:
         self._process_info = []
         self._name_offset = 0
 
-    def __eq__(self, process):
-        is_equal = self.pid == process.pid
-        is_equal = is_equal and self.pid == process.pid
-        is_equal = is_equal and self.parent.pid == process.parent.pid
-        is_equal = is_equal and self.virtual_memory == process.virtual_memory
-        return is_equal
-
     def read_stat(self):
         stat_file = os.path.join(procpy.PROC_FS, str(self.pid), procpy.PROC_STAT)
         try:
