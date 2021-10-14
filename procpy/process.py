@@ -25,6 +25,10 @@ class Process:
         self._name_offset = self._calculate_name_offset()
 
     def _calculate_name_offset(self):
+        # Set an offset value based on whether the name field in process stat
+        # contains spaces or not. This offset value helps us to correctly map
+        # other properties since we split the values in stat on the space
+        # character.
         last_name_index = 1
         for i, value in enumerate(self._process_info[last_name_index:]):
             if len(value) == 1:
@@ -38,6 +42,9 @@ class Process:
 
     @property
     def name(self):
+        # TODO: Perhaps we could create a cache decorator for the below `if`
+        # condition and use that instead, as well as for all other properties
+        # too.
         if len(self._process_info) == 0:
             self.read_stat()
         name = self._process_info[1:self._name_offset + 2]
