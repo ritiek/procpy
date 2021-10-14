@@ -5,6 +5,11 @@ import pwd
 
 class Process:
     def __init__(self, pid):
+        """
+        The specification for "/proc/<pid>/stat" is defined at:
+        https://man7.org/linux/man-pages/man5/proc.5.html
+        or can be found out using `$ man procfs`.
+        """
         self.pid = int(pid)
         self._process_info = []
         self._process_owner = None
@@ -71,13 +76,13 @@ class Process:
     def utime(self):
         if len(self._process_info) == 0:
             self.read_stat()
-        return int(self._process_info[14 + self._name_offset])
+        return int(self._process_info[13 + self._name_offset])
 
     @property
     def stime(self):
         if len(self._process_info) == 0:
             self.read_stat()
-        return int(self._process_info[15 + self._name_offset])
+        return int(self._process_info[14 + self._name_offset])
 
     @property
     def owner(self):

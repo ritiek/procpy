@@ -22,7 +22,7 @@ class TestProcess(procpy.tests.TestInitialize):
         self.assertEqual(process.name, "tmux: client")
         self.assertEqual(process.parent.pid, parent_process.pid)
         self.assertEqual(process.virtual_memory, procpy.Bytes(9011200))
-        self.assertEqual(process.utime, 0)
+        self.assertEqual(process.utime, 1)
         self.assertEqual(process.stime, 0)
         self.assertEqual(process.owner, getpass.getuser())
 

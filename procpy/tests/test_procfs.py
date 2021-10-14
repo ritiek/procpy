@@ -54,8 +54,8 @@ class TestProcFS(procpy.tests.TestInitialize):
         # TODO: Looks ugly. Is there a better way to assert for output?
         expected_header = "    PID     NAME                                      PPID     VIRTMEM     UTIME   STIME    OWNER     "
         expected_output = ["  45086     fusermount                                3498     2.41MB      0       0        {owner:<10}",
-                           "   3585     dolphin                                   818      287.78MB    1470    0        {owner:<10}",
-                           "   1337     tmux: client                              1337     8.59MB      0       0        {owner:<10}"]
+                           "   3585     dolphin                                   818      287.78MB    1162    1470     {owner:<10}",
+                           "   1337     tmux: client                              1337     8.59MB      1       0        {owner:<10}"]
 
         for n, line in enumerate(expected_output):
             expected_output[n] = line.format(owner=getpass.getuser())
