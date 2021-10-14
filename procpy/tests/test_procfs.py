@@ -1,5 +1,6 @@
 import procpy
-import unittest
+
+from io import StringIO
 
 
 class TestProcFS(procpy.tests.TestInitialize):
@@ -45,6 +46,14 @@ class TestProcFS(procpy.tests.TestInitialize):
             process_ = procpy.Process(process.pid)
             self._assert_processes(process, process_)
 
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_pretty_print(self):
+        # TODO: Looks ugly. Is there a better way to assert for output?
+        expected_output = ("    PID     NAME                                      PPID          VIRTMEM   \n"
+                           "  45086     fusermount                                3498          2.41MB    \n"
+                           "   3585     dolphin                                   818           287.78MB  \n"
+                           "   1337     tmux: client                              1337          8.59MB    \n")
+        procfs = procpy.ProcFS()
+        processes = procfs.snapshot()
+        output = StringIO()
+        procpy.pretty_print_processes(processes, out=output)
+        self.assertEqual(output.getvalue(), expected_output)
