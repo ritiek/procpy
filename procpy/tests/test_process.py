@@ -32,6 +32,10 @@ class TestProcess(procpy.tests.TestInitialize):
         with self.assertRaises(procpy.SwapProcessError):
             process.read_stat()
 
+    def test_process_repr(self):
+        process = procpy.Process(34523)
+        self.assertEqual(repr(process), "Process<(pid=34523)>")
+
 
 if __name__ == "__main__":
     unittest.main()
