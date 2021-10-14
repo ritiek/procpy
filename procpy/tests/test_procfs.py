@@ -37,6 +37,8 @@ class TestProcFS(procpy.tests.TestInitialize):
         self.assertEqual(process.name, process_.name)
         self.assertEqual(process.parent.pid, process_.parent.pid)
         self.assertEqual(process.virtual_memory, process_.virtual_memory)
+        self.assertEqual(process.utime, process_.utime)
+        self.assertEqual(process.stime, process_.stime)
 
     def test_snapshot(self):
         procfs = procpy.ProcFS()
@@ -48,10 +50,10 @@ class TestProcFS(procpy.tests.TestInitialize):
 
     def test_pretty_print(self):
         # TODO: Looks ugly. Is there a better way to assert for output?
-        expected_output = ("    PID     NAME                                      PPID          VIRTMEM   \n"
-                           "  45086     fusermount                                3498          2.41MB    \n"
-                           "   3585     dolphin                                   818           287.78MB  \n"
-                           "   1337     tmux: client                              1337          8.59MB    \n")
+        expected_output = ("    PID     NAME                                      PPID          VIRTMEM     UTIME   STIME \n"
+                           "  45086     fusermount                                3498          2.41MB      0       0     \n"
+                           "   3585     dolphin                                   818           287.78MB    1470    0     \n"
+                           "   1337     tmux: client                              1337          8.59MB      0       0     \n")
         procfs = procpy.ProcFS()
         processes = procfs.snapshot()
         output = StringIO()

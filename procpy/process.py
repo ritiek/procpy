@@ -55,3 +55,15 @@ class Process:
         if len(self._process_info) == 0:
             self.read_stat()
         return procpy.Bytes(self._process_info[22 + self._name_offset])
+
+    @property
+    def utime(self):
+        if len(self._process_info) == 0:
+            self.read_stat()
+        return int(self._process_info[14 + self._name_offset])
+
+    @property
+    def stime(self):
+        if len(self._process_info) == 0:
+            self.read_stat()
+        return int(self._process_info[15 + self._name_offset])
