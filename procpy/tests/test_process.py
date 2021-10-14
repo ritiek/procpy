@@ -1,5 +1,7 @@
 import procpy
 
+import getpass
+
 
 class TestProcess(procpy.tests.TestInitialize):
     def setUp(self):
@@ -22,6 +24,7 @@ class TestProcess(procpy.tests.TestInitialize):
         self.assertEqual(process.virtual_memory, procpy.Bytes(9011200))
         self.assertEqual(process.utime, 0)
         self.assertEqual(process.stime, 0)
+        self.assertEqual(process.owner, getpass.getuser())
 
     def test_non_existing_process(self):
         process = procpy.Process(1338)

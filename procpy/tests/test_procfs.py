@@ -1,6 +1,7 @@
 import procpy
 
 from io import StringIO
+import getpass
 
 
 class TestProcFS(procpy.tests.TestInitialize):
@@ -39,6 +40,7 @@ class TestProcFS(procpy.tests.TestInitialize):
         self.assertEqual(process.virtual_memory, process_.virtual_memory)
         self.assertEqual(process.utime, process_.utime)
         self.assertEqual(process.stime, process_.stime)
+        self.assertEqual(process.owner, process_.owner)
 
     def test_snapshot(self):
         procfs = procpy.ProcFS()
@@ -50,10 +52,11 @@ class TestProcFS(procpy.tests.TestInitialize):
 
     def test_pretty_print(self):
         # TODO: Looks ugly. Is there a better way to assert for output?
-        expected_output = ("    PID     NAME                                      PPID          VIRTMEM     UTIME   STIME \n"
-                           "  45086     fusermount                                3498          2.41MB      0       0     \n"
-                           "   3585     dolphin                                   818           287.78MB    1470    0     \n"
-                           "   1337     tmux: client                              1337          8.59MB      0       0     \n")
+        expected_output = ("    PID     NAME                                      PPID     VIRTMEM     UTIME   STIME    OWNER     \n"
+                           "  45086     fusermount                                3498     2.41MB      0       0        {owner:<10}\n"
+                           "   3585     dolphin                                   818      287.78MB    1470    0        {owner:<10}\n"
+                           "   1337     tmux: client                              1337     8.59MB      0       0        {owner:<10}\n")
+        expected_output = expected_output.format(owner=getpass.getuser())
         procfs = procpy.ProcFS()
         processes = procfs.snapshot()
         output = StringIO()

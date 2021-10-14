@@ -1,11 +1,13 @@
 import procpy
 import os
+import pwd
 
 
 class Process:
     def __init__(self, pid):
         self.pid = int(pid)
         self._process_info = []
+        self._process_owner = None
         self._name_offset = 0
 
     def read_stat(self):
@@ -22,6 +24,8 @@ class Process:
                     os.path.join(procpy.PROC_FS, str(self.pid), procpy.PROC_STAT))
                 )
         self._process_info = content.split()
+        # Owner of the process is same as the owner of stat file.
+        self._process_owner = pwd.getpwuid(os.stat(stat_file).st_uid).pw_name
         self._name_offset = self._calculate_name_offset()
 
     def _calculate_name_offset(self):
@@ -74,3 +78,9 @@ class Process:
         if len(self._process_info) == 0:
             self.read_stat()
         return int(self._process_info[15 + self._name_offset])
+
+    @property
+    def owner(self):
+        if self._process_owner is None:
+            self.read_stat()
+        return self._process_owner
