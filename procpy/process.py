@@ -7,6 +7,9 @@ class Bytes:
         self.units = ["B", "KB", "MB", "GB"]
         self.numeral = int(numeral)
 
+    def __eq__(self, bytes_):
+        return self.numeral == bytes_.numeral
+
     def __int__(self):
         return self.numeral
 
@@ -19,12 +22,22 @@ class Bytes:
         unit = self.units[unit_index]
         return numeral, unit
 
+    def __repr__(self):
+        return "Bytes<(numeral={})>".format(self.numeral)
+
 
 class Process:
     def __init__(self, pid):
         self.pid = int(pid)
         self._process_info = []
         self._name_offset = 0
+
+    def __eq__(self, process):
+        is_equal = self.pid == process.pid
+        is_equal = is_equal and self.pid == process.pid
+        is_equal = is_equal and self.parent.pid == process.parent.pid
+        is_equal = is_equal and self.virtual_memory == process.virtual_memory
+        return is_equal
 
     def read_stat(self):
         stat_file = os.path.join(procpy.PROC_FS, str(self.pid), procpy.PROC_STAT)
@@ -52,18 +65,24 @@ class Process:
         return len(name) - 1
 
     def __repr__(self):
-        return 'Process<(pid={})>'.format(self.pid)
+        return "Process<(pid={})>".format(self.pid)
 
     @property
     def name(self):
+        if len(self._process_info) == 0:
+            self.read_stat()
         name = self._process_info[1:self._name_offset + 2]
         name = " ".join(name)
         return name[1:-1]
 
     @property
     def parent(self):
+        if len(self._process_info) == 0:
+            self.read_stat()
         return Process(self._process_info[3 + self._name_offset])
 
     @property
     def virtual_memory(self):
+        if len(self._process_info) == 0:
+            self.read_stat()
         return Bytes(self._process_info[22 + self._name_offset])
